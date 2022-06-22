@@ -1,6 +1,7 @@
 package com.minolog.api.controller;
 
 import com.minolog.api.dto.request.PostCreate;
+import com.minolog.api.dto.request.PostEdit;
 import com.minolog.api.dto.request.PostSearch;
 import com.minolog.api.dto.response.PostResponse;
 import com.minolog.api.service.PostService;
@@ -35,6 +36,11 @@ public class PostController {
     @GetMapping
     public List<PostResponse> getList(PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody PostEdit postEdit) {
+        postService.edit(id, postEdit);
     }
 
 
