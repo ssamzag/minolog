@@ -24,7 +24,7 @@ onMounted(() => {
 const router = useRouter();
 
 const edit = () => {
-  axios.put(`/api/posts/${props.postId}`, post.value).then(() => {
+  axios.put(`/api/posts/${props.postId}`, post.value, {headers:{Authorization: "Bearer " + localStorage.getItem('token')}}).then(() => {
     router.replace({name: "home"});
   });
 }

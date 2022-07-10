@@ -11,6 +11,10 @@ const write = function () {
       .post("/api/posts", {
         title: title.value,
         content: content.value
+      }, {
+        headers: {
+            Authorization: 'bearer ' +  localStorage.getItem('token')
+        }
       })
       .then(() => {
         router.replace({name: "home"})

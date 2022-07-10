@@ -16,6 +16,7 @@ axios.get("/api/posts?page=1&size=5").then((response) => {
       <li v-for="post in posts" :key="post.id">
         <div>
           <router-link :to="{name: 'read', params: {postId: post.id}}">{{post.title}}</router-link>
+          <h4>{{post.nickName}}</h4>
         </div>
 
         <div>

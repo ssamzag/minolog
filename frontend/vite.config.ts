@@ -17,6 +17,10 @@ export default defineConfig({
             "/api/posts": {
                 target: "http://localhost:8080",
                 rewrite: (path) => path.replace(/^\/api/, "")
+            },
+            "/api/login": {
+                target: "http://localhost:8080",
+                rewrite: (path) => path.replace(/^\/api/, "")
             }
         }
     }
