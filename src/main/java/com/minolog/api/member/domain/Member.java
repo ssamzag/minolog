@@ -33,7 +33,7 @@ public class Member extends BaseEntity {
 
     public void checkPassword(String password) {
         if (!this.password.equals(password)) {
-            throw new AuthorizationException();
+            throw new AuthorizationException("비밀번호가 틀림");
         }
     }
 }
