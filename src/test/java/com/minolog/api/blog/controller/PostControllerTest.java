@@ -205,4 +205,34 @@ class PostControllerTest {
                 .andExpect(jsonPath("$[0].title").value("제목 30"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 아이디로 로그인을 시도하면 에러를 반환한다")
+    void loginTest1() throws Exception {
+        //given
+        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("you").build());
+
+        //expected
+        mockMvc.perform(post("/login/token")
+                        .contentType(APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("아이디를 확인해 주세요."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("틀린 비밀번호로 로그인을 시도하면 에러를 반환한다")
+    void loginTest2() throws Exception {
+        //given
+        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("ssamzag").password("what").build());
+
+        //expected
+        mockMvc.perform(post("/login/token")
+                        .contentType(APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("비밀번호가 틀림"))
+                .andDo(print());
+    }
 }

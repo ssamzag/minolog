@@ -1,14 +1,14 @@
 package com.minolog.api.auth.controller;
 
+import com.minolog.api.auth.dto.AuthErrorResult;
 import com.minolog.api.auth.dto.TokenRequest;
 import com.minolog.api.auth.dto.TokenResponse;
 import com.minolog.api.auth.service.AuthService;
+import com.minolog.api.auth.service.AuthorizationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
@@ -20,5 +20,10 @@ public class AuthController {
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
         TokenResponse response = authService.login(tokenRequest);
         return ResponseEntity.ok().body(response);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<AuthErrorResult> authorizationExceptionHandler(AuthorizationException e) {
+        return new ResponseEntity(new AuthErrorResult(HttpStatus.UNAUTHORIZED, e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 }
