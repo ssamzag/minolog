@@ -6,9 +6,10 @@ import com.minolog.api.auth.dto.TokenResponse;
 import com.minolog.api.auth.service.AuthService;
 import com.minolog.api.blog.domain.Post;
 import com.minolog.api.blog.dto.request.PostCreate;
+import com.minolog.api.blog.dto.request.PostSearch;
 import com.minolog.api.blog.repository.PostRepository;
+import com.minolog.api.member.domain.MemberRepository;
 import com.minolog.api.member.dto.MemberRequest;
-import com.minolog.api.member.dto.MemberResponse;
 import com.minolog.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,14 +45,16 @@ class PostControllerTest {
     private MemberService memberService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private MemberRepository memberRepository;
 
-    private MemberResponse memberResponse;
     private String accessToken;
 
     @BeforeEach
     void setup() {
         postRepository.deleteAll();
-        memberResponse = memberService.save(MemberRequest.builder().userId("hi").nickName("myNick").password("1234").build());
+        memberRepository.deleteAll();
+        memberService.save(MemberRequest.builder().userId("hi").nickName("myNick").password("1234").build());
         TokenResponse hi = authService.login(TokenRequest.builder().userId("hi").password("1234").build());
         accessToken = hi.getAccessToken();
     }
@@ -152,7 +155,7 @@ class PostControllerTest {
         postRepository.saveAll(Arrays.asList(request, request2));
 
         //expected
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -210,7 +213,7 @@ class PostControllerTest {
     @DisplayName("존재하지 않는 아이디로 로그인을 시도하면 에러를 반환한다")
     void loginTest1() throws Exception {
         //given
-        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("you").build());
+        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("bye").build());
 
         //expected
         mockMvc.perform(post("/login/token")
@@ -225,7 +228,7 @@ class PostControllerTest {
     @DisplayName("틀린 비밀번호로 로그인을 시도하면 에러를 반환한다")
     void loginTest2() throws Exception {
         //given
-        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("ssamzag").password("what").build());
+        String content = objectMapper.writeValueAsString(TokenRequest.builder().userId("hi").password("what").build());
 
         //expected
         mockMvc.perform(post("/login/token")
