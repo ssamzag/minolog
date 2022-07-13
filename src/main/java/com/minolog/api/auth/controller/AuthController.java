@@ -21,9 +21,4 @@ public class AuthController {
         TokenResponse response = authService.login(tokenRequest);
         return ResponseEntity.ok().body(response);
     }
-
-    @ExceptionHandler(AuthorizationException.class)
-    public ResponseEntity<AuthErrorResult> authorizationExceptionHandler(AuthorizationException e) {
-        return new ResponseEntity(new AuthErrorResult(HttpStatus.UNAUTHORIZED, e.getMessage()), HttpStatus.UNAUTHORIZED);
-    }
 }

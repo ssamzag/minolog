@@ -14,6 +14,8 @@ const login = () => {
   }).then((response) => {
     localStorage.setItem('token', response.data.accessToken);
     router.replace({name: "home"});
+  }).catch(r => {
+    alert(r.response.data.message);
   });
 }
 

@@ -1,4 +1,4 @@
-package com.minolog.api.common;
+package com.minolog.api.config;
 
 import com.minolog.api.auth.controller.AuthenticationPrincipalArgumentResolver;
 import com.minolog.api.auth.service.AuthService;

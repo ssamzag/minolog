@@ -28,4 +28,8 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("아이디 없음"));
         return MemberResponse.of(member);
     }
+
+    public Member findMemberByUserId(String userId) {
+        return memberRepository.findByUserId(userId).orElseThrow(RuntimeException::new);
+    }
 }
