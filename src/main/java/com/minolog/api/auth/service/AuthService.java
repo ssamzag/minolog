@@ -16,15 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
 
     public TokenResponse login(TokenRequest tokenRequest) {
-        Member member = memberRepository.findByUserId(tokenRequest.getUserId())
-                .orElseThrow(() -> new AuthorizationException("아이디를 확인해 주세요."));
-
+        Member member = memberService.findMemberByUserId(tokenRequest.getUserId());
         member.checkPassword(tokenRequest.getPassword());
         String token = jwtTokenProvider.createToken(tokenRequest.getUserId());
+
         return new TokenResponse(token);
     }
 
